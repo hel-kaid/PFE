@@ -1,0 +1,84 @@
+.robozzle-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #111827, #1e3a8a);
+  padding: 24px;
+  color: white;
+}
+
+.robozzle-card {
+  width: 100%;
+  max-width: 700px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.robozzle-title {
+  font-size: 42px;
+  margin: 0;
+  text-align: center;
+}
+
+.robozzle-subtitle {
+  text-align: center;
+  color: #d1d5db;
+  margin-bottom: 32px;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.level-button {
+  border: none;
+  border-radius: 16px;
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #facc15;
+  color: #111827;
+  transition: 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.level-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  background: #fde047;
+  box-shadow: 0 10px 25px rgba(250, 204, 21, 0.35);
+}
+
+.level-button.completed {
+  background: #22c55e;
+  color: white;
+}
+
+.level-button.locked {
+  background: #6b7280;
+  color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.level-icon {
+  margin-left: 8px;
+}
+
+.status {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 22px;
+}
+
+.error {
+  color: #ef4444;
+}

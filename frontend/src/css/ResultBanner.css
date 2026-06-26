@@ -1,0 +1,48 @@
+.result-banner {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid transparent;
+}
+
+.result-win {
+  background: #ecfdf5;
+  border-color: #22c55e;
+  color: #166534;
+}
+
+.result-lose {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.result-icon {
+  font-size: 28px;
+}
+
+.result-text {
+  flex: 1;
+}
+
+.result-text h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.result-text p {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+.result-actions button {
+  border: none;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}

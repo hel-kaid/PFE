@@ -1,0 +1,103 @@
+.functions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.function-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.function-title {
+  min-width: 34px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.slots-row {
+  display: flex;
+  gap: 6px;
+}
+
+.slot {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d4d4d4;
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.slot:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.slot.filled {
+  background: #f8fafc;
+}
+
+.slot.empty-slot {
+  color: #9ca3af;
+}
+
+.slot-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.slot-label {
+  line-height: 1;
+}
+
+.slot-plus {
+  font-size: 20px;
+  font-weight: 600;
+}
+.slot {
+  position: relative;
+}
+
+.slot.executing {
+  background: #00ff41 !important;
+  color: #111827 !important;
+  border-color: #00ff41 !important;
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.9);
+  transform: scale(1.08);
+}
+
+.slot.executing::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -7px;
+  height: 3px;
+  background: #00ff41;
+  border-radius: 999px;
+  box-shadow: 0 0 10px #00ff41;
+}

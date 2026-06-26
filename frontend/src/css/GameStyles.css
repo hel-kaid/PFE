@@ -1,0 +1,54 @@
+
+.robozzle-game-wrapper {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.robozzle-game-wrapper *,
+.robozzle-game-wrapper *::before,
+.robozzle-game-wrapper *::after {
+  box-sizing: border-box;
+}
+
+.game-container {
+  overflow-x: auto;
+  z-index: 1;
+}
+
+.game-container > * {
+  position: relative;
+  z-index: 2;
+}
+
+.completion-success {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 16px;
+  padding: 12px 18px;
+  border: 1px solid rgba(0, 255, 65, 0.25);
+  border-radius: 8px;
+  background: rgba(0, 255, 65, 0.08);
+  color: #00ff41;
+  font-family: "Courier New", monospace;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.35);
+}
+
+.completion-error {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 16px;
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 68, 68, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 68, 68, 0.08);
+  color: #ff4444;
+  font-family: "Courier New", monospace;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .game-container {
+    max-width: 100%;
+  }
+}

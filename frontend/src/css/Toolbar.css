@@ -1,0 +1,53 @@
+.toolbar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toolbar-section h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.toolbar-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tool-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d4d4d4;
+  background: white;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool-btn:hover {
+  background: #f3f4f6;
+}
+
+.tool-btn.active {
+  outline: 3px solid #111827;
+  outline-offset: 2px;
+}
+
+.command-btn {
+  line-height: 1;
+}
+
+.color-btn {
+  position: relative;
+}
+
+.color-dot {
+  font-size: 26px;
+  line-height: 1;
+}

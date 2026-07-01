@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useRobozzleStages from "../hooks/useRobozzleStages";
 import Game from "../components/robozzle/Game";
 import "../css/GameStyles.css";
-
+import "../css/PythonGame.css";
 export default function RobozzleGamePage() {
   const { stageId } = useParams();
   const navigate = useNavigate();
@@ -58,17 +58,7 @@ export default function RobozzleGamePage() {
     completionData,
   ]);
 
-  if (loading && !currentStage) {
-    return (
-      <div className="robozzle-loading">
-        <div className="loading-spinner" />
-        <div className="loading-text">
-          <span className="blink">█</span> CHARGEMENT DU NIVEAU...
-        </div>
-        <div className="loading-sub">Initialisation du système</div>
-      </div>
-    );
-  }
+   if (loading) return <h2 className="html-loading">Loading...</h2>;
 
   if (error) {
     return (
@@ -84,21 +74,7 @@ export default function RobozzleGamePage() {
     );
   }
 
-  if (!currentStage) {
-    return (
-      <div className="robozzle-notfound">
-        <div className="notfound-icon">🔍</div>
-        <div className="notfound-title">NIVEAU INTROUVABLE</div>
-        <div className="notfound-message">
-          Le niveau #{stageId} n'existe pas dans la matrice
-        </div>
-
-        <button className="notfound-button" onClick={goBack}>
-          ⟲ RETOUR À LA LISTE
-        </button>
-      </div>
-    );
-  }
+  
 
   return (
     <div className="robozzle-game-wrapper">

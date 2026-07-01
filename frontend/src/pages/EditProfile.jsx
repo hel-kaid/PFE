@@ -254,283 +254,259 @@ export default function EditProfile() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6">
-            <div className="mx-auto max-w-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6">
+        <div className="mx-auto max-w-2xl">
 
-                {/* Header */}
-                <div className="mb-8 flex items-center justify-between">
-                    <button
-                        onClick={() => navigate("/profile")}
-                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition font-semibold"
-                    >
-                        <ArrowLeft className="w-5 h-5" />
+            {/* Header */}
+            <div className="mb-8 flex items-center justify-between">
+                <button
+                    onClick={() => navigate("/profile")}
+                    className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition font-semibold"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    Back to Profile
+                </button>
+            </div>
 
-                        Retour au Profil
-                    </button>
+            {/* Form */}
+            <form
+                onSubmit={handleSubmit}
+                className="rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 bg-white"
+            >
+
+                {/* Top */}
+                <div className="bg-gradient-to-br from-purple-700 via-pink-600 to-orange-500 px-8 py-12 text-white">
+                    <h1 className="text-4xl font-black tracking-tight">
+                        Edit My Profile
+                    </h1>
+
+                    <p className="mt-2 text-white/80">
+                        Update your personal information
+                    </p>
                 </div>
 
-                {/* Form */}
-                <form
-                    onSubmit={handleSubmit}
-                    className="rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 bg-white"
-                >
+                <div className="p-8">
 
-                    {/* Top */}
-                    <div className="bg-gradient-to-br from-purple-700 via-pink-600 to-orange-500 px-8 py-12 text-white">
-                        <h1 className="text-4xl font-black tracking-tight">
-                            Modifier Mon Profil
-                        </h1>
+                    {/* Error */}
+                    {error && (
+                        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                            <p className="text-red-700 font-semibold">
+                                {error}
+                            </p>
+                        </div>
+                    )}
 
-                        <p className="mt-2 text-white/80">
-                            Mettez à jour vos informations personnelles
-                        </p>
+                    {/* Success */}
+                    {success && (
+                        <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200">
+                            <p className="text-green-700 font-semibold">
+                                {success}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Avatar */}
+                    <div className="mb-8">
+                        <label className="block text-sm font-bold text-slate-900 mb-4">
+                            Profile Picture
+                        </label>
+
+                        <div className="flex items-center gap-6">
+
+                            <img
+                                src={avatarPreview}
+                                alt="Avatar Preview"
+                                className="w-32 h-32 rounded-full border-4 border-slate-200 object-cover"
+                            />
+
+                            <div className="flex-1">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleAvatarChange}
+                                    className="block w-full text-sm text-slate-500"
+                                />
+
+                                <p className="text-xs text-slate-500 mt-2">
+                                    JPG, PNG, WebP — Max 5MB
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="p-8">
+                    {/* Username */}
+                    <div className="mb-6">
+                        <label
+                            htmlFor="username"
+                            className="block text-sm font-bold text-slate-900 mb-2"
+                        >
+                            Username
+                        </label>
 
-                        {/* Error */}
-                        {error && (
-                            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-                                <p className="text-red-700 font-semibold">
-                                    {error}
-                                </p>
-                            </div>
-                        )}
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            placeholder="Your username"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
+                        />
+                    </div>
 
-                        {/* Success */}
-                        {success && (
-                            <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200">
-                                <p className="text-green-700 font-semibold">
-                                    {success}
-                                </p>
-                            </div>
-                        )}
+                    {/* Email */}
+                    <div className="mb-6">
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-bold text-slate-900 mb-2"
+                        >
+                            Email Address
+                        </label>
 
-                        {/* Avatar */}
-                        <div className="mb-8">
-                            <label className="block text-sm font-bold text-slate-900 mb-4">
-                                Photo de Profil
-                            </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            placeholder="your@email.com"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
+                        />
+                    </div>
 
-                            <div className="flex items-center gap-6">
+                    <div className="my-8 border-t border-slate-200"></div>
 
-                                <img
-                                    src={avatarPreview}
-                                    alt="Avatar Preview"
-                                    className="w-32 h-32 rounded-full border-4 border-slate-200 object-cover"
-                                />
+                    {/* Password section */}
+                    <h3 className="text-lg font-bold text-slate-900 mb-4">
+                        Change Password
+                    </h3>
 
-                                <div className="flex-1">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleAvatarChange}
-                                        className="block w-full text-sm text-slate-500"
-                                    />
+                    {/* Current password */}
+                    <div className="mb-6">
+                        <label
+                            htmlFor="current_password"
+                            className="block text-sm font-bold text-slate-900 mb-2"
+                        >
+                            Current Password
+                        </label>
 
-                                    <p className="text-xs text-slate-500 mt-2">
-                                        JPG, PNG, WebP — Max 5MB
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Username */}
-                        <div className="mb-6">
-                            <label
-                                htmlFor="username"
-                                className="block text-sm font-bold text-slate-900 mb-2"
-                            >
-                                Nom d'utilisateur
-                            </label>
-
+                        <div className="relative">
                             <input
-                                type="text"
-                                id="username"
-                                name="username"
-                                value={formData.username}
+                                type={showPassword ? "text" : "password"}
+                                id="current_password"
+                                name="current_password"
+                                value={formData.current_password}
                                 onChange={handleInputChange}
-                                placeholder="Votre nom d'utilisateur"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
+                                placeholder="Enter your current password"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition pr-12"
                             />
-                        </div>
-
-                        {/* Email */}
-                        <div className="mb-6">
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-bold text-slate-900 mb-2"
-                            >
-                                Adresse Email
-                            </label>
-
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                placeholder="votre@email.com"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                            />
-                        </div>
-
-                        <div className="my-8 border-t border-slate-200"></div>
-
-                        {/* Password section */}
-                        <h3 className="text-lg font-bold text-slate-900 mb-4">
-                            Changer le Mot de Passe
-                        </h3>
-
-                        {/* Current password */}
-                        <div className="mb-6">
-                            <label
-                                htmlFor="current_password"
-                                className="block text-sm font-bold text-slate-900 mb-2"
-                            >
-                                Mot de passe actuel
-                            </label>
-
-                            <div className="relative">
-                                <input
-                                    type={
-                                        showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    id="current_password"
-                                    name="current_password"
-                                    value={
-                                        formData.current_password
-                                    }
-                                    onChange={handleInputChange}
-                                    placeholder="Entrez votre mot de passe actuel"
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition pr-12"
-                                />
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setShowPassword(
-                                            !showPassword
-                                        )
-                                    }
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="w-5 h-5" />
-                                    ) : (
-                                        <Eye className="w-5 h-5" />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* New password */}
-                        <div className="mb-6">
-                            <label
-                                htmlFor="password"
-                                className="block text-sm font-bold text-slate-900 mb-2"
-                            >
-                                Nouveau mot de passe
-                            </label>
-
-                            <div className="relative">
-                                <input
-                                    type={
-                                        showNewPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    id="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
-                                    placeholder="Entrez un nouveau mot de passe"
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition pr-12"
-                                />
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setShowNewPassword(
-                                            !showNewPassword
-                                        )
-                                    }
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
-                                >
-                                    {showNewPassword ? (
-                                        <EyeOff className="w-5 h-5" />
-                                    ) : (
-                                        <Eye className="w-5 h-5" />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Confirm password */}
-                        {formData.password && (
-                            <div className="mb-8">
-                                <label
-                                    htmlFor="password_confirmation"
-                                    className="block text-sm font-bold text-slate-900 mb-2"
-                                >
-                                    Confirmer le mot de passe
-                                </label>
-
-                                <input
-                                    type="password"
-                                    id="password_confirmation"
-                                    name="password_confirmation"
-                                    value={
-                                        formData.password_confirmation
-                                    }
-                                    onChange={handleInputChange}
-                                    placeholder="Confirmez le mot de passe"
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                                />
-
-                                {formData.password_confirmation &&
-                                    formData.password !==
-                                        formData.password_confirmation && (
-                                        <p className="mt-2 text-xs text-red-600">
-                                            Les mots de passe ne correspondent pas
-                                        </p>
-                                    )}
-                            </div>
-                        )}
-
-                        {/* Buttons */}
-                        <div className="flex gap-4 pt-4 border-t border-slate-200">
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    navigate("/profile")
-                                }
-                                className="flex-1 px-6 py-3 rounded-xl border-2 border-slate-300 text-slate-900 font-bold hover:bg-slate-50 transition"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
                             >
-                                Annuler
-                            </button>
-
-                            <button
-                                type="submit"
-                                disabled={isSaving}
-                                className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
-                            >
-                                {isSaving ? (
-                                    <>
-                                        <Loader className="w-5 h-5 animate-spin" />
-                                        Sauvegarde...
-                                    </>
+                                {showPassword ? (
+                                    <EyeOff className="w-5 h-5" />
                                 ) : (
-                                    "Sauvegarder"
+                                    <Eye className="w-5 h-5" />
                                 )}
                             </button>
                         </div>
                     </div>
-                </form>
-            </div>
+
+                    {/* New password */}
+                    <div className="mb-6">
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-bold text-slate-900 mb-2"
+                        >
+                            New Password
+                        </label>
+
+                        <div className="relative">
+                            <input
+                                type={showNewPassword ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                                placeholder="Enter a new password"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition pr-12"
+                            />
+
+                            <button
+                                type="button"
+                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
+                            >
+                                {showNewPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                ) : (
+                                    <Eye className="w-5 h-5" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Confirm password */}
+                    {formData.password && (
+                        <div className="mb-8">
+                            <label
+                                htmlFor="password_confirmation"
+                                className="block text-sm font-bold text-slate-900 mb-2"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                value={formData.password_confirmation}
+                                onChange={handleInputChange}
+                                placeholder="Confirm your password"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition"
+                            />
+
+                            {formData.password_confirmation &&
+                                formData.password !== formData.password_confirmation && (
+                                    <p className="mt-2 text-xs text-red-600">
+                                        Passwords do not match
+                                    </p>
+                                )}
+                        </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div className="flex gap-4 pt-4 border-t border-slate-200">
+
+                        <button
+                            type="button"
+                            onClick={() => navigate("/profile")}
+                            className="flex-1 px-6 py-3 rounded-xl border-2 border-slate-300 text-slate-900 font-bold hover:bg-slate-50 transition"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                        >
+                            {isSaving ? (
+                                <>
+                                    <Loader className="w-5 h-5 animate-spin" />
+                                    Saving...
+                                </>
+                            ) : (
+                                "Save"
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-    );
+    </div>
+);
 }

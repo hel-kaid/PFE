@@ -8,7 +8,7 @@ export const api = axios.create({
   },
 });
 
-// inject token automatiquement
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 

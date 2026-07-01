@@ -1,142 +1,87 @@
-import { motion } from "framer-motion";
 import {
+  Clock3,
+  Star,
   Lock,
   Play,
   RotateCcw,
   CheckCircle2,
-  Trophy,
 } from "lucide-react";
 
 export default function StageCard({ stage, onSelect }) {
-  const isLocked = stage.locked;
-  const isDone = stage.completed;
+  const isLocked = Boolean(stage.locked);
+  const isDone = Boolean(stage.completed);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={!isLocked ? { y: -6, scale: 1.02 } : {}}
-      transition={{ duration: 0.2 }}
-      className="rounded-3xl overflow-hidden bg-white shadow-xl border border-slate-200"
-      style={{
-        opacity: isLocked ? 0.7 : 1,
-        cursor: isLocked ? "not-allowed" : "pointer",
-      }}
-    >
-      {/* Top Bar */}
-      <div
-        className="h-1"
-        style={{
-          background: isDone
-            ? "#22c55e"
-            : isLocked
-            ? "#cbd5e1"
-            : "linear-gradient(90deg,#f97316,#ec4899)",
-        }}
-      />
+    <div className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+      <div className="h-2 bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500" />
 
-      {/* Body */}
-      <div className="p-5">
-        <div className="flex items-start justify-between mb-4">
-          <span
-            className={`text-xs px-3 py-1 rounded-xl font-bold tracking-wider ${
-              isDone
-                ? "bg-green-50 text-green-700"
-                : isLocked
-                ? "bg-slate-100 text-slate-400"
-                : "bg-orange-50 text-orange-600"
-            }`}
-          >
-            LEVEL {stage.id}
+      <div className="p-6">
+        <div className="flex items-start justify-between">
+          <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-600">
+            Level {stage.id}
           </span>
 
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDone
-                ? "bg-green-50"
-                : isLocked
-                ? "bg-slate-100"
-                : "bg-orange-50"
-            }`}
-          >
-            {isLocked ? (
-              <Lock size={18} className="text-slate-400" />
-            ) : (
-              <Trophy
-                size={18}
-                className={
-                  isDone
-                    ? "text-green-500"
-                    : "text-orange-500"
-                }
-              />
-            )}
-          </div>
+          {isDone && <CheckCircle2 size={26} className="text-green-500" />}
+
+          {!isDone && isLocked && (
+            <Lock size={22} className="text-slate-400" />
+          )}
         </div>
 
-        <h3
-          className={`font-bold text-base mb-2 ${
-            isLocked
-              ? "text-slate-400"
-              : "text-slate-800"
-          }`}
-        >
+        <h2 className="mt-5 line-clamp-1 text-xl font-black text-slate-800">
           {stage.name}
-        </h3>
+        </h2>
 
-        <p className="text-sm text-slate-500 leading-relaxed">
+        <p className="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
           {stage.description}
         </p>
 
-        {isDone && (
-          <div className="flex items-center gap-2 mt-4 px-3 py-2 rounded-xl bg-green-50 border border-green-200">
-            <CheckCircle2
-              size={14}
-              className="text-green-500"
-            />
-            <span className="text-xs font-semibold text-green-700">
-              Complété
+        <div className="mt-6 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-slate-500">
+            <Clock3 size={18} />
+            <span className="font-bold">
+              {stage.timer_seconds ?? stage.timerSeconds ?? 0}s
             </span>
           </div>
-        )}
-      </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
-        <span className="text-xs text-slate-400">
-          {stage.config?.gridSize}×{stage.config?.gridSize}
-        </span>
+          <div className="flex items-center gap-2 text-yellow-500">
+            <Star size={18} />
+            <span className="font-bold">{stage.xp_reward ?? 0} XP</span>
+          </div>
+        </div>
 
-        {isLocked ? (
-          <button
-            disabled
-            className="flex items-center gap-2 text-xs px-4 py-2 rounded-xl bg-slate-100 text-slate-400"
-          >
-            <Lock size={12} />
-            Verrouillé
-          </button>
-        ) : isDone ? (
-          <button
-            onClick={() => onSelect(stage.id)}
-            className="flex items-center gap-2 text-xs px-4 py-2 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold"
-          >
-            <RotateCcw size={12} />
-            Rejouer
-          </button>
-        ) : (
-          <button
-            onClick={() => onSelect(stage.id)}
-            className="flex items-center gap-2 text-xs px-4 py-2 rounded-xl text-white font-semibold shadow-md hover:scale-105 transition"
-            style={{
-              background:
-                "linear-gradient(135deg,#f97316,#ec4899)",
-            }}
-          >
-            <Play size={12} />
-            Jouer
-          </button>
-        )}
+        <button
+          disabled={isLocked}
+          onClick={() => !isLocked && onSelect(stage.id)}
+          className={`
+            mt-6 flex w-full items-center justify-center gap-2 rounded-2xl py-3 font-black transition-all duration-300
+            ${
+              isLocked
+                ? "cursor-not-allowed bg-slate-200 text-slate-500"
+                : isDone
+                ? "bg-green-500 text-white hover:bg-green-600"
+                : "bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:scale-105 hover:shadow-lg"
+            }
+          `}
+        >
+          {isLocked ? (
+            <>
+              <Lock size={18} />
+              Locked
+            </>
+          ) : isDone ? (
+            <>
+              <RotateCcw size={18} />
+              Play Again
+            </>
+          ) : (
+            <>
+              <Play size={18} />
+              Play
+            </>
+          )}
+        </button>
       </div>
-    </motion.div>
+    </div>
   );
 }

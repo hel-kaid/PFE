@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             PythonRpgSeeder::class,
             RobozzleSeeder::class,
             UserSeeder::class,
+            HtmlKidStageSeeder::class,
         ]);
     }
 }

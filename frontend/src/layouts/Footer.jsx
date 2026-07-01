@@ -12,9 +12,9 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-white">
       <div className="max-w-7xl mx-auto px-6 py-10">
-        {/* HAUT */}
+        {/* TOP */}
         <div className="grid md:grid-cols-4 gap-8">
-          {/* MARQUE */}
+          {/* BRAND */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400 via-pink-500 to-purple-500 flex items-center justify-center shadow-lg shadow-orange-200">
@@ -27,19 +27,20 @@ export function Footer() {
                 </h3>
 
                 <p className="text-xs text-slate-500">
-                  Apprendre à coder en jouant
+                  Learn to Code Through Play
                 </p>
               </div>
             </div>
 
             <p className="text-slate-500 leading-relaxed text-sm">
-              Des aventures de programmation amusantes pour les enfants avec des missions, des héros et des jeux.
+              Fun programming adventures for kids with exciting missions,
+              heroes, and interactive games.
             </p>
           </div>
 
-          {/* JEU */}
+          {/* GAMES */}
           <div>
-            <h4 className="font-bold text-slate-900 mb-4">Jeu</h4>
+            <h4 className="font-bold text-slate-900 mb-4">Games</h4>
 
             <ul className="space-y-3 text-sm">
               <li>
@@ -48,7 +49,7 @@ export function Footer() {
                   className="flex items-center gap-2 text-slate-500 hover:text-orange-500 transition"
                 >
                   <Globe className="w-4 h-4" />
-                  Mondes
+                  Game Worlds
                 </a>
               </li>
 
@@ -68,15 +69,15 @@ export function Footer() {
                   className="flex items-center gap-2 text-slate-500 hover:text-purple-500 transition"
                 >
                   <Trophy className="w-4 h-4" />
-                  Classement
+                  Leaderboard
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* APPRENDRE */}
+          {/* LEARN */}
           <div>
-            <h4 className="font-bold text-slate-900 mb-4">Apprendre</h4>
+            <h4 className="font-bold text-slate-900 mb-4">Learn</h4>
 
             <ul className="space-y-3 text-sm">
               <li>
@@ -111,9 +112,9 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COMPTE */}
+          {/* ACCOUNT */}
           <div>
-            <h4 className="font-bold text-slate-900 mb-4">Compte</h4>
+            <h4 className="font-bold text-slate-900 mb-4">Account</h4>
 
             <ul className="space-y-3 text-sm">
               <li>
@@ -122,7 +123,7 @@ export function Footer() {
                   className="flex items-center gap-2 text-slate-500 hover:text-orange-500 transition"
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  Connexion
+                  Login
                 </a>
               </li>
 
@@ -132,7 +133,7 @@ export function Footer() {
                   className="flex items-center gap-2 text-slate-500 hover:text-pink-500 transition"
                 >
                   <Rocket className="w-4 h-4" />
-                  Inscription
+                  Sign Up
                 </a>
               </li>
 
@@ -149,10 +150,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* BAS */}
+        {/* BOTTOM */}
         <div className="mt-10 pt-5 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
           <p className="text-slate-500">
-            © 2026 KidCoders. Créé avec créativité et code.
+            © 2026 KidCoders. Built with creativity and code.
           </p>
 
           <div className="flex items-center gap-5">
@@ -160,14 +161,14 @@ export function Footer() {
               href="#"
               className="text-slate-500 hover:text-orange-500 transition"
             >
-              Confidentialité
+              Privacy Policy
             </a>
 
             <a
               href="#"
               className="text-slate-500 hover:text-pink-500 transition"
             >
-              Conditions
+              Terms of Service
             </a>
 
             <a
@@ -182,3 +183,5 @@ export function Footer() {
     </footer>
   );
 }
+
+export default Footer;

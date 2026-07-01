@@ -5,7 +5,7 @@ import PythonRpgBoard from "./PythonRpgBoard";
 import VictoryModal from "../VictoryModal";
 import { parseCode } from "../../utils/snake_rpg/parser";
 import { COMMANDS } from "../../utils/snake_rpg/constants";
-
+import "../../css/PythonGame.css";
 const STEP_DELAY_MS = 300;
 const ATTACK_DELAY_MS = 350;
 const HIT_DELAY_MS = 250;
@@ -84,28 +84,93 @@ export default function PythonRpgGame({
 
   useEffect(() => {
     resetGame();
-  }, [stage.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [stage.id]);
 
   useEffect(() => {
-    if (!gameState || !hasPlayed || levelCompleted || completedRef.current) return;
+    if (!gameState || !hasPlayed || levelCompleted || completedRef.current) {
+      return;
+    }
 
     const { goal } = stage.config;
     let completed = false;
 
-    if (goal === "reach_flag") {
-      const flag = gameState.objects.find((obj) => obj.type === "flag");
-      completed =
-        flag &&
-        gameState.player.x === flag.x &&
-        gameState.player.y === flag.y;
-    }
+    switch (goal) {
+      case "reach_flag": {
+        const flag = gameState.objects.find(
+          (obj) => obj.type === "flag"
+        );
 
-    if (goal === "kill_all" || goal === "kill_boss") {
-      completed = gameState.enemies.length === 0;
-    }
+        completed =
+          !!flag &&
+          gameState.player.x === flag.x &&
+          gameState.player.y === flag.y;
 
-    if (goal === "collect_coins") {
-      completed = gameState.items.filter((item) => item.type === "coin").length === 0;
+        break;
+      }
+
+      case "kill_all": {
+        completed = gameState.enemies.length === 0;
+        break;
+      }
+
+      case "kill_boss": {
+        completed =
+          gameState.enemies.filter((enemy) => enemy.boss).length === 0;
+        break;
+      }
+
+      case "collect_coins": {
+        completed =
+          gameState.items.filter((item) => item.type === "coin").length === 0;
+        break;
+      }
+
+      case "collect_key": {
+        completed = gameState.inventory.some(
+          (item) => item.type === "key"
+        );
+        break;
+      }
+
+      case "open_door": {
+        completed = gameState.objects.some(
+          (obj) =>
+            obj.type === "door" &&
+            obj.opened === true
+        );
+        break;
+      }
+
+      case "complete_all": {
+        const coinsLeft = gameState.items.filter(
+          (item) => item.type === "coin"
+        ).length;
+
+        const keysLeft = gameState.items.filter(
+          (item) => item.type === "key"
+        ).length;
+
+        const enemiesLeft = gameState.enemies.length;
+
+        const doorsClosed = gameState.objects.filter(
+          (obj) =>
+            obj.type === "door" &&
+            obj.opened !== true
+        ).length;
+
+        completed =
+          coinsLeft === 0 &&
+          keysLeft === 0 &&
+          enemiesLeft === 0 &&
+          doorsClosed === 0;
+
+        break;
+      }
+
+      default: {
+        completed = false;
+        break;
+      }
     }
 
     if (completed) {
@@ -121,7 +186,13 @@ export default function PythonRpgGame({
           completedRef.current = false;
         });
     }
-  }, [gameState, hasPlayed, levelCompleted, stage, completeStage]);
+  }, [
+    gameState,
+    hasPlayed,
+    levelCompleted,
+    stage,
+    completeStage,
+  ]);
   function moveEnemyTowardPlayer(enemy, player, map, mapWidth, mapHeight, enemies) {
     const dx = player.x - enemy.x;
     const dy = player.y - enemy.y;
@@ -265,9 +336,17 @@ export default function PythonRpgGame({
     let player = { ...gameState.player };
     let enemies = gameState.enemies.map((e) => ({ ...e }));
     let items = gameState.items.map((i) => ({ ...i }));
+    let objects = gameState.objects.map((o) => ({ ...o }));
     let inventory = [...gameState.inventory];
 
-    const getCtx = () => ({ player, enemies, items, inventory });
+    const getCtx = () => ({
+  player,
+  enemies,
+  items,
+  objects,
+  inventory,
+  map: stage.config.map,
+});
 
     try {
       const actions = parseCode(code, getCtx);
@@ -286,41 +365,21 @@ export default function PythonRpgGame({
           if (action === COMMANDS.RIGHT) {
             player.x++;
             player.direction = "right";
-            const enemyResult = await enemiesTurn(player, enemies, items, inventory);
-            player = enemyResult.player;
-            enemies = enemyResult.enemies;
-
-            if (enemyResult.gameOver) return;
           }
 
           if (action === COMMANDS.LEFT) {
             player.x--;
             player.direction = "left";
-            const enemyResult = await enemiesTurn(player, enemies, items, inventory);
-            player = enemyResult.player;
-            enemies = enemyResult.enemies;
-
-            if (enemyResult.gameOver) return;
           }
 
           if (action === COMMANDS.UP) {
             player.y--;
             player.direction = "up";
-            const enemyResult = await enemiesTurn(player, enemies, items, inventory);
-            player = enemyResult.player;
-            enemies = enemyResult.enemies;
-
-            if (enemyResult.gameOver) return;
           }
 
           if (action === COMMANDS.DOWN) {
             player.y++;
             player.direction = "down";
-            const enemyResult = await enemiesTurn(player, enemies, items, inventory);
-            player = enemyResult.player;
-            enemies = enemyResult.enemies;
-
-            if (enemyResult.gameOver) return;
           }
 
           if (
@@ -330,6 +389,7 @@ export default function PythonRpgGame({
             player.y >= mapHeight
           ) {
             player = oldPlayer;
+            player.state = "idle";
             setMessage("Out of bounds ❌");
             return;
           }
@@ -345,6 +405,7 @@ export default function PythonRpgGame({
               player: { ...player },
               enemies: [...enemies],
               items: [...items],
+              objects: [...objects],
               inventory: [...inventory],
               effects: [
                 {
@@ -361,16 +422,111 @@ export default function PythonRpgGame({
             return;
           }
 
+          const door = objects.find(
+            (obj) =>
+              obj.type === "door" &&
+              obj.opened !== true &&
+              obj.x === player.x &&
+              obj.y === player.y
+          );
+
+          if (door) {
+            const hasKey = inventory.some((item) => item.type === "key");
+
+            if (!hasKey) {
+              player = oldPlayer;
+              player.state = "idle";
+
+              setGameState((prev) => ({
+                ...prev,
+                player: { ...player },
+                enemies: [...enemies],
+                items: [...items],
+                objects: [...objects],
+                inventory: [...inventory],
+                effects: [],
+              }));
+
+              setMessage("🔒 You need a key!");
+              await sleep(300);
+              return;
+            }
+
+            objects = objects.map((obj) => {
+              if (
+                obj.type === "door" &&
+                obj.x === door.x &&
+                obj.y === door.y
+              ) {
+                return {
+                  ...obj,
+                  opened: true,
+                };
+              }
+
+              return obj;
+            });
+
+            inventory = inventory.filter((item) => item.type !== "key");
+
+            setGameState((prev) => ({
+              ...prev,
+              player: { ...player },
+              enemies: [...enemies],
+              items: [...items],
+              objects: [...objects],
+              inventory: [...inventory],
+              effects: [],
+            }));
+
+            setMessage("🚪 Door opened!");
+            await sleep(300);
+          }
+
           setGameState((prev) => ({
             ...prev,
             player: { ...player },
             enemies: [...enemies],
             items: [...items],
+            objects: [...objects],
             inventory: [...inventory],
             effects: [],
           }));
 
           await sleep(STEP_DELAY_MS);
+
+          const collectedItem = items.find(
+            (item) => item.x === player.x && item.y === player.y
+          );
+
+          if (collectedItem) {
+            inventory.push(collectedItem);
+            items = items.filter((item) => item !== collectedItem);
+          }
+
+          player.state = "idle";
+
+          setGameState((prev) => ({
+            ...prev,
+            player: { ...player },
+            enemies: [...enemies],
+            items: [...items],
+            objects: [...objects],
+            inventory: [...inventory],
+            effects: [],
+          }));
+
+          const enemyResult = await enemiesTurn(
+            player,
+            enemies,
+            items,
+            inventory
+          );
+
+          player = enemyResult.player;
+          enemies = enemyResult.enemies;
+
+          if (enemyResult.gameOver) return;
 
           if (tile === "spike") {
             player.hp -= 1;
@@ -381,6 +537,7 @@ export default function PythonRpgGame({
               player: { ...player },
               enemies: [...enemies],
               items: [...items],
+              objects: [...objects],
               inventory: [...inventory],
               effects: [
                 {
@@ -400,26 +557,6 @@ export default function PythonRpgGame({
             }
           }
 
-          const collectedItem = items.find(
-            (item) => item.x === player.x && item.y === player.y
-          );
-
-          if (collectedItem) {
-            inventory.push(collectedItem);
-            items = items.filter((item) => item !== collectedItem);
-          }
-
-          player.state = "idle";
-
-          setGameState((prev) => ({
-            ...prev,
-            player: { ...player },
-            enemies: [...enemies],
-            items: [...items],
-            inventory: [...inventory],
-            effects: [],
-          }));
-
           const attackingEnemy = enemies.find((enemy) =>
             isSameTile(enemy, player)
           );
@@ -436,6 +573,7 @@ export default function PythonRpgGame({
               player: { ...player },
               enemies: [...enemies],
               items: [...items],
+              objects: [...objects],
               inventory: [...inventory],
               effects: [
                 {
@@ -462,6 +600,7 @@ export default function PythonRpgGame({
               player: { ...player },
               enemies: [...enemies],
               items: [...items],
+              objects: [...objects],
               inventory: [...inventory],
               effects: [],
             }));
@@ -495,6 +634,7 @@ export default function PythonRpgGame({
                 : enemy
             ),
             items: [...items],
+            objects: [...objects],
             inventory: [...inventory],
             effects: target
               ? [
@@ -516,6 +656,7 @@ export default function PythonRpgGame({
           }));
 
           await sleep(ATTACK_DELAY_MS);
+
           if (target) {
             enemies = enemies.map((enemy) => {
               if (enemy.id !== target.id) return enemy;
@@ -535,6 +676,7 @@ export default function PythonRpgGame({
               player: { ...player },
               enemies: [...enemies],
               items: [...items],
+              objects: [...objects],
               inventory: [...inventory],
               effects: [
                 {
@@ -554,6 +696,7 @@ export default function PythonRpgGame({
               )
               .filter((enemy) => enemy.hp > 0);
           }
+
           player.state = "idle";
 
           setGameState((prev) => ({
@@ -561,6 +704,7 @@ export default function PythonRpgGame({
             player: { ...player },
             enemies: [...enemies],
             items: [...items],
+            objects: [...objects],
             inventory: [...inventory],
             effects: [],
           }));
@@ -577,6 +721,7 @@ export default function PythonRpgGame({
         player: { ...player },
         enemies: [...enemies],
         items: [...items],
+        objects: [...objects],
         inventory: [...inventory],
         effects: [],
       }));
@@ -603,6 +748,8 @@ export default function PythonRpgGame({
   if (!gameState) {
     return <p className="text-center py-10 text-white">Loading stage…</p>;
   }
+
+
 
   return (
     <div className="min-h-screen bg-white text-slate-900 overflow-hidden rounded-3xl">

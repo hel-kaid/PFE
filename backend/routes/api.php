@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SnakeGameController;
 use App\Http\Controllers\RobozzleController;
+use App\Http\Controllers\HtmlKidController;
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -37,15 +39,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/snake/complete', [SnakeGameController::class, 'complete']);
 
-    Route::get( '/python-rpg/{gameId}/stages', [PythonRpgController::class, 'index']);
+    Route::get('/python-rpg/{gameId}/stages', [PythonRpgController::class, 'index']);
 
-    Route::get('/python-rpg/stages/{id}',[PythonRpgController::class, 'show']);
+    Route::get('/python-rpg/stages/{id}', [PythonRpgController::class, 'show']);
 
-    Route::post('/python-rpg/complete',[PythonRpgController::class, 'complete']);
+    Route::post('/python-rpg/complete', [PythonRpgController::class, 'complete']);
 
     Route::get('/robozzle/{gameId}/stages', [RobozzleController::class, 'index']);
 
     Route::get('/robozzle/stages/{id}', [RobozzleController::class, 'show']);
 
     Route::post('/robozzle/complete', [RobozzleController::class, 'complete']);
+    
+    Route::get('/html-kid/{gameId}/stages', [HtmlKidController::class, 'index']);
+
+    Route::get('/html-kid/stages/{id}', [HtmlKidController::class, 'show']);
+
+    Route::post('/html-kid/stages/complete', [HtmlKidController::class, 'complete']);
 });

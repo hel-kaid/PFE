@@ -1,33 +1,12 @@
-import PythonRpgStageCard
-from "./PythonRpgStageCard";
+import PythonRpgStageCard from "./PythonRpgStageCard";
 
-export default function PythonRpgStages({
-    stages,
-    onSelect,
-}) {
+export default function PythonRpgStages({ stages, onSelect }) {
+    if (!stages || !Array.isArray(stages)) return null;
 
     return (
-
-        <div
-            className="
-                grid
-                md:grid-cols-2
-                lg:grid-cols-3
-                gap-4
-            "
-        >
-
-            {stages.map((stage) => (
-
-                <PythonRpgStageCard
-                    key={stage.id}
-                    stage={stage}
-                    onClick={onSelect}
-                />
-
-            ))}
-
-        </div>
-
+        <PythonRpgStageCard
+            stages={stages}
+            onStageClick={onSelect}
+        />
     );
 }

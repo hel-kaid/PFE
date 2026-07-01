@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Player from "../images/Player";
 import Goblin from "../images/Goblin";
 import Orc from "../images/Orc";
+import Dragon from "../images/Orc"; // Fallback to Orc until Dragon component is created
 
 const MIN_TILE_SIZE = 64;
 
@@ -17,10 +18,7 @@ function useResponsiveTileSize(mapWidth, mapHeight) {
       const availableHeight = window.innerHeight - headerHeight - 180;
 
       const size = Math.floor(
-        Math.min(
-          availableWidth / mapWidth,
-          availableHeight / mapHeight
-        )
+        Math.min(availableWidth / mapWidth, availableHeight / mapHeight)
       );
 
       setTileSize(Math.max(MIN_TILE_SIZE, size));
@@ -47,7 +45,14 @@ const SPRITES = {
     <svg viewBox="0 0 32 32" width="60%" height="60%">
       <circle cx="16" cy="16" r="12" fill="#d4a017" />
       <circle cx="16" cy="16" r="9" fill="#f0c030" />
-      <text x="16" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#c8700a">
+      <text
+        x="16"
+        y="20"
+        textAnchor="middle"
+        fontSize="10"
+        fontWeight="bold"
+        fill="#c8700a"
+      >
         $
       </text>
     </svg>
@@ -55,9 +60,24 @@ const SPRITES = {
 
   key: (
     <svg viewBox="0 0 32 32" width="60%" height="60%">
-      <circle cx="10" cy="12" r="7" fill="none" stroke="#c8a45a" strokeWidth="3" />
+      <circle
+        cx="10"
+        cy="12"
+        r="7"
+        fill="none"
+        stroke="#c8a45a"
+        strokeWidth="3"
+      />
       <rect x="15" y="11" width="14" height="3" fill="#c8a45a" rx="1" />
       <rect x="24" y="14" width="3" height="4" fill="#c8a45a" rx="1" />
+    </svg>
+  ),
+
+  door: (
+    <svg viewBox="0 0 32 32" width="70%" height="70%">
+      <rect x="7" y="5" width="18" height="24" rx="2" fill="#5a3518" />
+      <rect x="10" y="8" width="12" height="18" rx="1" fill="#7a4a20" />
+      <circle cx="20" cy="17" r="1.5" fill="#c8a45a" />
     </svg>
   ),
 };
@@ -71,44 +91,44 @@ function getObjectSprite(type) {
 }
 
 function getStoneTile(tileSize) {
-  const base = "#191f1e";
-
   return (
-    <svg
-      viewBox="0 0 64 64"
-      width={tileSize}
-      height={tileSize}
-      style={{ display: "block" }}
-    >
-      <rect x="0" y="0" width="64" height="64" fill={base} />
-
-      <rect
-        x="0"
-        y="0"
-        width="64"
-        height="64"
-        fill="none"
-        stroke="#0a0a12"
-        strokeWidth="1"
-      />
-
+    <svg viewBox="0 0 64 64" width={tileSize} height={tileSize} style={{ display: "block" }}>
+      <rect x="0" y="0" width="64" height="64" fill="#191f1e" />
+      <rect x="0" y="0" width="64" height="64" fill="none" stroke="#0a0a12" strokeWidth="1" />
       <ellipse cx="26" cy="22" rx="12" ry="7" fill="#1a3028" opacity="0.65" />
       <ellipse cx="48" cy="48" rx="9" ry="5" fill="#1c3522" opacity="0.5" />
-
       <rect x="0" y="0" width="64" height="2" fill="#ffffff" opacity="0.02" />
       <rect x="0" y="0" width="2" height="64" fill="#ffffff" opacity="0.02" />
     </svg>
   );
 }
 
+function getWallTile(tileSize) {
+  return (
+    <div
+      style={{
+        width: tileSize,
+        height: tileSize,
+        background: "#0b0b0b",
+        border: "1px solid #2a1a10",
+        boxShadow: "inset 0 0 20px rgba(0,0,0,0.9)",
+        boxSizing: "border-box",
+      }}
+    />
+  );
+}
+
 export default function PythonRpgBoard({ gameState }) {
-  const mapWidth = 12;
-  const mapHeight = 6;
+  const mapWidth = gameState.map?.width || 12;
+  const mapHeight = gameState.map?.height || 6;
 
   const TILE_SIZE = useResponsiveTileSize(mapWidth, mapHeight);
 
   const boardW = mapWidth * TILE_SIZE;
   const boardH = mapHeight * TILE_SIZE;
+
+  const visibleItems = gameState.items?.filter((item) => !item.collected) || [];
+  const aliveEnemies = gameState.enemies?.filter((enemy) => enemy.hp > 0) || [];
 
   return (
     <div
@@ -160,6 +180,7 @@ export default function PythonRpgBoard({ gameState }) {
         {Array.from({ length: mapWidth * mapHeight }).map((_, index) => {
           const tx = index % mapWidth;
           const ty = Math.floor(index / mapWidth);
+          const tile = gameState.map?.tiles?.[ty]?.[tx] || "floor";
 
           return (
             <div
@@ -172,7 +193,7 @@ export default function PythonRpgBoard({ gameState }) {
                 top: ty * TILE_SIZE,
               }}
             >
-              {getStoneTile(TILE_SIZE)}
+              {tile === "wall" ? getWallTile(TILE_SIZE) : getStoneTile(TILE_SIZE)}
             </div>
           );
         })}
@@ -195,7 +216,7 @@ export default function PythonRpgBoard({ gameState }) {
           </div>
         ))}
 
-        {gameState.items?.map((item, index) => (
+        {visibleItems.map((item, index) => (
           <div
             key={index}
             style={{
@@ -214,24 +235,18 @@ export default function PythonRpgBoard({ gameState }) {
           </div>
         ))}
 
-        {gameState.enemies?.map((enemy) => (
+        {aliveEnemies.map((enemy) => (
           <div key={enemy.id}>
             {enemy.type === "goblin" && (
-              <Goblin
-                x={enemy.x}
-                y={enemy.y}
-                tileSize={TILE_SIZE}
-                state={enemy.state}
-              />
+              <Goblin x={enemy.x} y={enemy.y} tileSize={TILE_SIZE} state={enemy.state} />
             )}
 
             {enemy.type === "orc" && (
-              <Orc
-                x={enemy.x}
-                y={enemy.y}
-                tileSize={TILE_SIZE}
-                state={enemy.state}
-              />
+              <Orc x={enemy.x} y={enemy.y} tileSize={TILE_SIZE} state={enemy.state} />
+            )}
+
+            {enemy.type === "dragon" && (
+              <Dragon x={enemy.x} y={enemy.y} tileSize={TILE_SIZE} state={enemy.state} />
             )}
 
             <div
@@ -249,7 +264,7 @@ export default function PythonRpgBoard({ gameState }) {
               <div
                 style={{
                   height: "100%",
-                  width: `${Math.round((enemy.hp / (enemy.maxHp || 1)) * 100)}%`,
+                  width: `${Math.round((enemy.hp / (enemy.maxHp || enemy.hp || 1)) * 100)}%`,
                   background: "linear-gradient(90deg, #8b1a1a, #e03030)",
                 }}
               />
@@ -257,12 +272,14 @@ export default function PythonRpgBoard({ gameState }) {
           </div>
         ))}
 
-        <Player
-          x={gameState.player.x}
-          y={gameState.player.y}
-          tileSize={TILE_SIZE}
-          state={gameState.player.state}
-        />
+        {gameState.player && (
+          <Player
+            x={gameState.player.x}
+            y={gameState.player.y}
+            tileSize={TILE_SIZE}
+            state={gameState.player.state}
+          />
+        )}
 
         <style>{`
           @keyframes itemFloat {
@@ -288,7 +305,7 @@ export default function PythonRpgBoard({ gameState }) {
         </div>
 
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {gameState.inventory?.length === 0 && (
+          {(!gameState.inventory || gameState.inventory.length === 0) && (
             <span style={{ color: "#6a5a40", fontSize: 13, fontStyle: "italic" }}>
               Empty
             </span>

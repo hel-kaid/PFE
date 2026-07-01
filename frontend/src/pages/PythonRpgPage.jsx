@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import usePythonRpgStages from "../hooks/usePythonRpgStages";
 import PythonRpgStages from "../components/rpg/PythonRpgStages";
 import PythonRpgGame from "../components/rpg/PythonRpgGame";
-
+import "../css/PythonGame.css";
 export default function PythonRpgPage() {
 
     const gameId = 2;
     const {
         stages,
         currentStage,
+        loading,
         fetchStage,
         completeStage,
     } = usePythonRpgStages(gameId);
@@ -27,6 +28,8 @@ export default function PythonRpgPage() {
 
     useEffect(() => {
     }, [currentStage?.id]);
+    if (loading) return <h2 className="html-loading">Loading...</h2>;
+
     return (
 
         <div className="mx-auto mt-6">

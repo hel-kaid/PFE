@@ -53,7 +53,7 @@ export default function Login() {
       } else if (backendMessage) {
         setGlobalError(backendMessage);
       } else {
-        setGlobalError("Une erreur s'est produite. Veuillez réessayer.");
+        setGlobalError("Something went wrong. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -71,22 +71,22 @@ export default function Login() {
           </div>
 
           <h1 className="text-2xl font-black mt-4">
-            Bon retour
+            Welcome Back
           </h1>
 
           <p className="text-slate-500 text-sm">
-            Connectez-vous pour continuer votre aventure
+            Sign in to continue your coding adventure.
           </p>
         </div>
 
-        {/* ERREUR GLOBALE */}
+        {/* GLOBAL ERROR */}
         {globalError && (
           <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
 
             <div>
               <p className="text-red-800 text-sm font-semibold">
-                Erreur
+                Error
               </p>
 
               <p className="text-red-700 text-sm mt-1">
@@ -96,13 +96,13 @@ export default function Login() {
           </div>
         )}
 
-        {/* FORMULAIRE */}
+        {/* FORM */}
         <div className="space-y-4">
 
           {/* USERNAME */}
           <div>
             <label className="text-sm text-slate-600 font-semibold">
-              Nom d'utilisateur
+              Username
             </label>
 
             <div
@@ -116,7 +116,7 @@ export default function Login() {
 
               <input
                 className="w-full outline-none text-sm bg-transparent"
-                placeholder="Entrez votre nom d'utilisateur"
+                placeholder="Enter your username"
                 value={form.username}
                 onChange={(e) => {
                   setForm({ ...form, username: e.target.value });
@@ -138,7 +138,7 @@ export default function Login() {
           {/* PASSWORD */}
           <div>
             <label className="text-sm text-slate-600 font-semibold">
-              Mot de passe
+              Password
             </label>
 
             <div
@@ -153,7 +153,7 @@ export default function Login() {
               <input
                 type="password"
                 className="w-full outline-none text-sm bg-transparent"
-                placeholder="Entrez votre mot de passe"
+                placeholder="Enter your password"
                 value={form.password}
                 onChange={(e) => {
                   setForm({ ...form, password: e.target.value });
@@ -172,24 +172,25 @@ export default function Login() {
             )}
           </div>
 
-          {/* BUTTON */}
+          {/* LOGIN BUTTON */}
           <button
             onClick={handleSubmit}
             disabled={isLoading}
             className="w-full mt-6 py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold shadow-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Connexion en cours..." : "Se connecter"}
+            {isLoading ? "Signing In..." : "Sign In"}
           </button>
 
           <p className="text-center text-sm text-slate-500 mt-6">
-            Vous n’avez pas de compte ?{" "}
+            Don't have an account?{" "}
             <Link
               to="/register"
               className="text-orange-500 font-semibold hover:underline"
             >
-              S’inscrire
+              Sign Up
             </Link>
           </p>
+
         </div>
       </div>
     </div>

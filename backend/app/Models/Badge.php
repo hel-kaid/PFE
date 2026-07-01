@@ -16,4 +16,10 @@ class Badge extends Model
         'description',
         'icon',
     ];
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('game_id')
+            ->withTimestamps();
+    }
 }

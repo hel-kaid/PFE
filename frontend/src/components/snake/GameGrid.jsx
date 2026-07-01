@@ -39,7 +39,7 @@ export default function GameGrid({
     <div className="h-full min-h-0 flex flex-col rounded-[32px] bg-white border border-slate-200 shadow-xl overflow-hidden">
       {/* Header */}
       <div className="shrink-0 px-5 py-3 bg-slate-900 text-white">
-        <h2 className="font-black text-lg">🐉 Terrain du dragon</h2>
+        <h2 className="font-black text-lg">🐍 Terrain du dragon</h2>
         <p className="text-xs text-slate-300">
           Guide le dragon jusqu’à l’étoile.
         </p>
@@ -104,7 +104,7 @@ export default function GameGrid({
                     }}
                     className="text-2xl relative z-10"
                   >
-                    🐉
+                    🐍
                   </motion.span>
                 )}
 

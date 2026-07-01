@@ -42,4 +42,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function badges()
+{
+    return $this->belongsToMany(Badge::class)
+        ->withPivot('game_id')
+        ->withTimestamps();
+}
 }

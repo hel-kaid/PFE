@@ -27,6 +27,12 @@ class GameSeeder extends Seeder
                 'slug' => 'robozzle',
                 'description' => 'A puzzle game where you program a robot to collect stars',
                 'is_active' => true,
+            ],
+            [
+                'name' => 'Html Kid',
+                'slug' => 'html-kid',
+                'description' => 'Learn HTML by solving puzzles',
+                'is_active' => true,
             ]
         ];
 

@@ -18,7 +18,26 @@ import {
 import BadgeCard from "../components/badge/Badge";
 
 export default function Profile() {
-
+    const Badges = [
+        {
+            id: 1,
+            name: "First Python Game",
+            icon: "🐍",
+            description: "Completed your first Python game",
+        },
+        {
+            id: 2,
+            name: "HTML Badge",
+            icon: "</>",
+            description: "Completed your first HTML lesson",
+        },
+        {
+            id: 3,
+            name: "Robozzle master",
+            icon: "🤖",
+            description: "Completed all the robozzle levels",
+        }
+    ];
     const { user, profile, logout } = useAuth();
     const { badges, getBadges } = useBadges();
 
@@ -82,16 +101,16 @@ export default function Profile() {
     // Optimisation calculs
     const stats = useMemo(() => {
 
-    
-        return { 
+
+        return {
             totalXP: user?.xp || 0,
             currentLevel: user?.level || 1,
-            streakDays: user?.streak_days || 0,
+            streakDays: user?.streak_days || 4,
+            totalGamesCompleted: user?.games_completed || 3,
         };
 
-    }, [ user]);
+    }, [user]);
 
-    // Loading
     if (isLoading) {
 
         return (
@@ -102,7 +121,7 @@ export default function Profile() {
                     <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
 
                     <p className="text-slate-500 font-semibold">
-                        Chargement du profil...
+                        Loading profile...
                     </p>
 
                 </div>
@@ -111,13 +130,12 @@ export default function Profile() {
         );
     }
 
-    // Protection
     if (!user) {
 
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <p className="text-slate-500">
-                    Utilisateur introuvable
+                    User not found
                 </p>
             </div>
         );
@@ -139,7 +157,7 @@ export default function Profile() {
 
                         <ArrowLeft className="w-5 h-5" />
 
-                        Retour au Dashboard
+                        Back to Dashboard
 
                     </button>
 
@@ -183,7 +201,7 @@ export default function Profile() {
                                     <div className="mt-4">
 
                                         <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white font-semibold">
-                                            Membre actif
+                                            Active Member
                                         </span>
 
                                     </div>
@@ -203,8 +221,7 @@ export default function Profile() {
                                 >
 
                                     <Edit className="w-5 h-5" />
-
-                                    Modifier Profil
+                                    Edit Profile
 
                                 </button>
 
@@ -215,7 +232,7 @@ export default function Profile() {
 
                                     <LogOut className="w-5 h-5" />
 
-                                    Déconnexion
+                                    Logout
 
                                 </button>
 
@@ -233,35 +250,31 @@ export default function Profile() {
                             {/* LEVEL */}
                             <StatCard
                                 icon={<Trophy className="w-6 h-6 text-yellow-500" />}
-                                title="Niveau"
+                                title="Level"
                                 value={stats.currentLevel}
-                                subtitle="Progression rapide"
+                                subtitle="Fast Progress"
                             />
 
-                            {/* XP */}
                             <StatCard
                                 icon={<Zap className="w-6 h-6 text-orange-500" />}
-                                title="XP Total"
+                                title="Total XP"
                                 value={stats.totalXP.toLocaleString()}
-                                subtitle="Points d'expérience"
+                                subtitle="Experience Points"
                             />
 
-                            {/* GAMES */}
                             <StatCard
                                 icon={<Award className="w-6 h-6 text-blue-500" />}
-                                title="Jeux"
+                                title="Games"
                                 value={stats.totalGamesCompleted}
-                                subtitle="Complétés"
+                                subtitle="Completed"
                             />
 
-                            {/* STREAK */}
                             <StatCard
                                 icon={<Flame className="w-6 h-6 text-red-500" />}
                                 title="Streak"
                                 value={stats.streakDays}
-                                subtitle="Jours consécutifs"
+                                subtitle="Consecutive Days"
                             />
-
                         </div>
 
                     </div>
@@ -270,32 +283,60 @@ export default function Profile() {
 
                 {/* Progress */}
                 <div className="rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 bg-white mb-8">
-
                     <div className="p-8">
-
                         <div className="flex items-center gap-3 mb-8">
-
                             <TrendingUp className="w-8 h-8 text-orange-500" />
-
                             <h2 className="text-3xl font-black text-slate-900">
-                                Progression
+                                Progress
                             </h2>
-
                         </div>
 
-                        
-
-                            <div className="text-center py-12">
-
-                                <TrendingUp className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-
-                                <p className="text-slate-500">
-                                    Pas de progression enregistrée
-                                </p>
-
+                        {/* Fake Statistics */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                            <div className="bg-orange-50 rounded-2xl p-5 text-center">
+                                <p className="text-3xl font-black text-orange-600">87%</p>
+                                <p className="text-sm text-slate-500 mt-1">Completion</p>
                             </div>
-                    </div>
 
+                            <div className="bg-green-50 rounded-2xl p-5 text-center">
+                                <p className="text-3xl font-black text-green-600">24</p>
+                                <p className="text-sm text-slate-500 mt-1">Sessions</p>
+                            </div>
+
+                            <div className="bg-blue-50 rounded-2xl p-5 text-center">
+                                <p className="text-3xl font-black text-blue-600">142h</p>
+                                <p className="text-sm text-slate-500 mt-1">Study Time</p>
+                            </div>
+
+                            <div className="bg-purple-50 rounded-2xl p-5 text-center">
+                                <p className="text-3xl font-black text-purple-600">+18%</p>
+                                <p className="text-sm text-slate-500 mt-1">Improvement</p>
+                            </div>
+                        </div>
+
+                        {/* Fake Progress Bars */}
+                        <div className="space-y-6">
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <span className="font-medium text-slate-700">python</span>
+                                    <span className="font-semibold text-orange-600">90%</span>
+                                </div>
+                                <div className="w-full bg-slate-200 rounded-full h-3">
+                                    <div className="bg-orange-500 h-3 rounded-full w-[90%]"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <span className="font-medium text-slate-700">html</span>
+                                    <span className="font-semibold text-blue-600">72%</span>
+                                </div>
+                                <div className="w-full bg-slate-200 rounded-full h-3">
+                                    <div className="bg-blue-500 h-3 rounded-full w-[72%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Badges */}
@@ -308,17 +349,14 @@ export default function Profile() {
                             <Trophy className="w-8 h-8 text-yellow-500" />
 
                             <h2 className="text-3xl font-black text-slate-900">
-                                Badges Débloqués
+                                Unlocked Badges
                             </h2>
 
                         </div>
 
-                        {badges?.length > 0 ? (
-
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-                                {badges.map((badge) => (
-
+                        {Badges?.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {Badges.map((badge) => (
                                     <BadgeCard
                                         key={badge.id}
                                         name={badge.name}
@@ -326,19 +364,13 @@ export default function Profile() {
                                         description={badge.description}
                                     />
                                 ))}
-
                             </div>
-
                         ) : (
-
                             <div className="text-center py-12">
-
                                 <Trophy className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-
                                 <p className="text-slate-500">
-                                    Complète des défis pour débloquer des badges
+                                    Complete challenges to unlock badges.
                                 </p>
-
                             </div>
                         )}
 
